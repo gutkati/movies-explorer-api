@@ -34,7 +34,6 @@ mongoose.connect(MONGO_URL,{
 app.use('*', cors(allowedCors));
 app.use(bodyParser.json()); // данные с фронтенда приходят JSON-формата
 app.use(cookieParser()); // подключаем парсер кук как мидлвэр
-console.log('cookie', cookieParser)
 app.use(requestLogger); // записываются запросы и ответы
 
 app.use(routes)
