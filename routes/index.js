@@ -8,12 +8,12 @@ const { createUser, login, logout } = require('../controllers/users');
 
 router.post('/signup', creatUserValid, createUser);
 router.post('/signin',loginValid, login);
-router.post('/signout', logout);
 
 router.use(auth);
 
 router.use('/users', routUser);
 router.use('/movies', routMovie);
+router.post('/signout', logout);
 
 module.exports = router;
 

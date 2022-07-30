@@ -21,7 +21,7 @@ module.exports.createUser = (req, res, next) => { // создать пользо
   const { name, email, password,} = req.body;
   bcrypt
     .hash(password, 10) // хешируем пароль
-    .then((hash) => User.create({name, email, password: hash,})) // записываем данные в базу
+    .then((hash) => User.create({ name, email, password: hash })) // записываем данные в базу
     .then((user) => res.status(201).send({
       name: user.name,
       email: user.email,
