@@ -11,14 +11,9 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const routes = require('./routes');
 const { MONGO_URL } = require('./config');
 const { errorHandler } = require('./middlewares/errorHandler');
-const { limiter } = require('./middlewares/rateLimiter')
-
-const allowedCors = {
-  origin: [
-     'http://localhost:3000',
-  ],
-  credentials: true, // устанавливает куки
-};
+const { limiter } = require('./middlewares/rateLimiter');
+const { MESSAGES } = require('./utils/constants');
+const { allowedCors } = require('./middlewares/cors');
 
 const { PORT = 3000 } = process.env;
 
@@ -39,7 +34,7 @@ app.use(requestLogger); // записываются запросы и ответ
 app.use(routes)
 
 app.use((req, res, next) => {
-  next(new NotFoundError('Страница не найдена'));
+  next(new NotFoundError(MESSAGES.pageNotFound));
 });
 
 app.use(errorLogger); // записываются все ошибки
@@ -47,7 +42,4 @@ app.use(errors()); // обработчик ошибок celebrate
 
 app.use(errorHandler); // централизованный обработчик ошибок
 
-app.listen(PORT, () => {
-  // Если всё работает, консоль покажет, какой порт приложение слушает
-  // console.log(`App listening on port ${PORT}`);
-});
+app.listen(PORT);

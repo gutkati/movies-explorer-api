@@ -5,13 +5,14 @@ const ConflictError = require('../errors/ConflictError'); // 409
 const NotFoundError = require('../errors/NotFoundError'); // 404
 const UnauthorizedError = require('../errors/UnauthorizedError'); // 401
 const ValidationError = require('../errors/ValidationError'); // 400
+const { MESSAGES } = require('../utils/constants')
 
 const {SECRET_KEY} = require('../config')
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 function describeErrors(err, res, next) {
   if (err.name === 'ValidationError' || err.name === 'CastError') {
-    next(new ValidationError('Переданы некорректные данные'));
+    next(new ValidationError(MESSAGES.incorrectData));
   } else {
     next(err);
   }
@@ -28,7 +29,7 @@ module.exports.createUser = (req, res, next) => { // создать пользо
     })) // возвращаем записанные данные в базу пользователю
     .catch((err) => {
       if (err.code === 11000) { // если пользователь регистрируется по существующему в базе email
-        next(new ConflictError('Данный email уже существует'));
+        next(new ConflictError(MESSAGES.alreadyExist));
       } else {
         describeErrors(err, res, next);
       }
@@ -41,12 +42,12 @@ module.exports.login = (req, res, next) => {
   User.findOne({ email }).select('+password') // вызвать метод select, так получаем хэш пароля
     .then((user) => {
       if (!user) { // пользователь не найден - отклоняем промис
-        throw new UnauthorizedError('Неправильные почта или пароль');
+        throw new UnauthorizedError(MESSAGES.wrongAuthData);
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) { // хэши не совпали - отклоняем промис
-            throw new UnauthorizedError('Неправильные почта или пароль');
+            throw new UnauthorizedError(MESSAGES.wrongAuthData);
           }
 
           return user;
@@ -62,7 +63,7 @@ module.exports.login = (req, res, next) => {
         .cookie('jwt', token, {
           httpOnly: true, sameSite: 'none', maxAge: 3600000 * 24 * 7,
         })
-        .send({ message: 'Авторизация прошла успешно!' });
+        .send({ message: MESSAGES.authPassed });
     })
     .catch((err) => next(err));
 };
@@ -72,14 +73,14 @@ module.exports.logout = (req, res) => {
     .clearCookie('jwt', {
       httpOnly: true, sameSite: 'none', maxAge: 3600000 * 24 * 7,
     })
-    .send({ message: 'куки удалены' });
+    .send({ message: MESSAGES.cookieRemoved });
 };
 
 module.exports.getInfoAboutMe = (req, res, next) => {
   User.findById(req.user._id) // находит текущего пользователя по _id
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Пользователь по указанному Id не найден');
+        throw new NotFoundError(MESSAGES.userNotFound);
       } else {
         res.status(200).send({
           email: user.email,
