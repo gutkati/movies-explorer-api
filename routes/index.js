@@ -7,7 +7,7 @@ const auth = require('../middlewares/auth');
 const { createUser, login, logout } = require('../controllers/users');
 
 router.post('/signup', creatUserValid, createUser);
-router.post('/signin',loginValid, login);
+router.post('/signin', loginValid, login);
 
 router.use(auth);
 
@@ -16,4 +16,3 @@ router.use('/movies', routMovie);
 router.post('/signout', logout);
 
 module.exports = router;
-

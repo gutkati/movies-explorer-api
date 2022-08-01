@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const isURL = require('validator/lib/isURL');
+
 const { ObjectId } = mongoose.Schema.Types;
 
 const movieSchema = new mongoose.Schema({

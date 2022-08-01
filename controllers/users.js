@@ -5,9 +5,10 @@ const ConflictError = require('../errors/ConflictError'); // 409
 const NotFoundError = require('../errors/NotFoundError'); // 404
 const UnauthorizedError = require('../errors/UnauthorizedError'); // 401
 const ValidationError = require('../errors/ValidationError'); // 400
-const { MESSAGES } = require('../utils/constants')
+const { MESSAGES } = require('../utils/constants');
 
-const {SECRET_KEY} = require('../config')
+const { SECRET_KEY } = require('../config');
+
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 function describeErrors(err, res, next) {
@@ -19,7 +20,7 @@ function describeErrors(err, res, next) {
 }
 
 module.exports.createUser = (req, res, next) => { // создать пользователя
-  const { name, email, password,} = req.body;
+  const { name, email, password } = req.body;
   bcrypt
     .hash(password, 10) // хешируем пароль
     .then((hash) => User.create({ name, email, password: hash })) // записываем данные в базу

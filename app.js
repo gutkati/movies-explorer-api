@@ -21,17 +21,17 @@ const app = express();
 app.use(helmet()); // защита приложение путем настройки приложения
 app.use(limiter); //
 
-mongoose.connect(MONGO_URL,{
+mongoose.connect(MONGO_URL, {
   useNewUrlParser: true,
 });
 
-//middleware
+// middleware
 app.use('*', cors(allowedCors));
 app.use(bodyParser.json()); // данные с фронтенда приходят JSON-формата
 app.use(cookieParser()); // подключаем парсер кук как мидлвэр
 app.use(requestLogger); // записываются запросы и ответы
 
-app.use(routes)
+app.use(routes);
 
 app.use((req, res, next) => {
   next(new NotFoundError(MESSAGES.pageNotFound));

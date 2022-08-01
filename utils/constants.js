@@ -11,4 +11,4 @@ module.exports.MESSAGES = {
   notAuth: 'Пользователь не авторизован',
   cookieRemoved: 'Кукки удалены',
   pageNotFound: 'Страница не найдена',
-}
+};
