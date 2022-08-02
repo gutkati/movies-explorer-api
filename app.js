@@ -19,7 +19,8 @@ const { PORT = 3000 } = process.env;
 
 const app = express();
 app.use(helmet()); // защита приложение путем настройки приложения
-app.use(limiter); //
+app.use(requestLogger); // записываются запросы и ответы
+app.use(limiter);
 
 mongoose.connect(MONGO_URL, {
   useNewUrlParser: true,
@@ -29,7 +30,6 @@ mongoose.connect(MONGO_URL, {
 app.use('*', cors(allowedCors));
 app.use(bodyParser.json()); // данные с фронтенда приходят JSON-формата
 app.use(cookieParser()); // подключаем парсер кук как мидлвэр
-app.use(requestLogger); // записываются запросы и ответы
 
 app.use(routes);
 

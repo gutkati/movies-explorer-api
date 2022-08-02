@@ -45,7 +45,7 @@ module.exports.login = (req, res, next) => {
       if (!user) { // пользователь не найден - отклоняем промис
         throw new UnauthorizedError(MESSAGES.wrongAuthData);
       }
-      return bcrypt.compare(password, user.password)
+      return bcrypt.compare(password, user.password) // сравниваем пароли
         .then((matched) => {
           if (!matched) { // хэши не совпали - отклоняем промис
             throw new UnauthorizedError(MESSAGES.wrongAuthData);
@@ -103,5 +103,11 @@ module.exports.updateProfile = (req, res, next) => {
     },
   )
     .then((user) => res.status(200).send(user))
-    .catch((err) => describeErrors(err, res, next));
+    .catch((err) => {
+      if (err.code === 11000) { // если пользователь меняет почту по существующую в базе
+        next(new ConflictError(MESSAGES.alreadyExist));
+      } else {
+        describeErrors(err, res, next);
+      }
+    });
 };

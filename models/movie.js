@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const isURL = require('validator/lib/isURL');
 
 const { ObjectId } = mongoose.Schema.Types;
+const { MESSAGES } = require('../utils/constants');
 
 const movieSchema = new mongoose.Schema({
   country: { // страна создания фильма
@@ -29,7 +30,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => isURL(v),
-      message: 'Неправильный формат url',
+      message: MESSAGES.wrongUrl,
     },
   },
   trailerLink: { // ссылка на трейлер фильма
@@ -37,7 +38,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => isURL(v),
-      message: 'Неправильный формат url',
+      message: MESSAGES.wrongUrl,
     },
   },
   thumbnail: { // миниатюрное изображение постера к фильму
@@ -45,7 +46,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => isURL(v),
-      message: 'Неправильный формат url',
+      message: MESSAGES.wrongUrl,
     },
   },
   owner: { // _id пользователя, который сохранил фильм
@@ -54,7 +55,7 @@ const movieSchema = new mongoose.Schema({
     ref: 'user',
   },
   movieId: { // id фильма
-    type: ObjectId,
+    type: Number,
     required: true,
   },
   nameRU: { // название фильма на русском
