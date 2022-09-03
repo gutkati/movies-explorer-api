@@ -61,10 +61,10 @@ module.exports.login = (req, res, next) => {
         { expiresIn: '7d' },
       );
       res
-        .cookie('jwt', token, {
-          httpOnly: true, sameSite: 'none', maxAge: 3600000 * 24 * 7,
-        })
-        .send({ message: MESSAGES.authPassed });
+        // .cookie('jwt', token, {
+        //   httpOnly: true, sameSite: 'none', maxAge: 3600000 * 24 * 7,
+        // })
+        .send({ token });
     })
     .catch((err) => next(err));
 };

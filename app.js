@@ -15,7 +15,7 @@ const { limiter } = require('./middlewares/rateLimiter');
 const { MESSAGES } = require('./utils/constants');
 const { allowedCors } = require('./middlewares/cors');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3001 } = process.env;
 
 const app = express();
 app.use(helmet()); // защита приложение путем настройки приложения
