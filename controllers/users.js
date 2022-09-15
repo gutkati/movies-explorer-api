@@ -60,21 +60,9 @@ module.exports.login = (req, res, next) => {
         NODE_ENV === 'production' ? JWT_SECRET : SECRET_KEY,
         { expiresIn: '7d' },
       );
-      res
-        // .cookie('jwt', token, {
-        //   httpOnly: true, sameSite: 'none', maxAge: 3600000 * 24 * 7,
-        // })
-        .send({ token });
+      res.send({ token });
     })
     .catch((err) => next(err));
-};
-
-module.exports.logout = (req, res) => {
-  res
-    .clearCookie('jwt', {
-      httpOnly: true, sameSite: 'none', maxAge: 3600000 * 24 * 7,
-    })
-    .send({ message: MESSAGES.cookieRemoved });
 };
 
 module.exports.getInfoAboutMe = (req, res, next) => {

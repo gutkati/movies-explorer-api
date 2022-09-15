@@ -3,7 +3,7 @@ const routUser = require('./users');
 const routMovie = require('./movies');
 const { loginValid, creatUserValid } = require('../middlewares/validation');
 const auth = require('../middlewares/auth');
-const { createUser, login, logout } = require('../controllers/users');
+const { createUser, login } = require('../controllers/users');
 const NotFoundError = require('../errors/NotFoundError');
 const { MESSAGES } = require('../utils/constants');
 
@@ -14,7 +14,7 @@ router.use(auth);
 
 router.use('/users', routUser);
 router.use('/movies', routMovie);
-router.post('/signout', logout);
+
 router.use((req, res, next) => {
   next(new NotFoundError(MESSAGES.routNotFound));
 });

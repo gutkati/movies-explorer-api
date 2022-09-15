@@ -13,7 +13,7 @@ function describeErrors(err, res, next) {
 }
 
 module.exports.getMovies = (req, res, next) => {
-  Movie.find({}) // поиск всех документов по параметрам
+  Movie.find({ owner: req.user._id }) // поиск всех документов по параметрам
     .then((movies) => res.status(200).send(movies))
     .catch((err) => describeErrors(err, res, next));
 };
@@ -54,7 +54,7 @@ module.exports.createMovie = (req, res, next) => {
 };
 
 module.exports.deleteMovie = (req, res, next) => {
-  Movie.findById(req.params.id) // удаление фильма по Id
+  Movie.findById(req.params.movieId) // удаление фильма по Id
     .then((movie) => {
       if (!movie) {
         throw new NotFoundError(MESSAGES.moviesNotFound);
@@ -63,7 +63,7 @@ module.exports.deleteMovie = (req, res, next) => {
       if (req.user._id !== movie.owner.toString()) { // нет прав удалять видео другого пользователя
         throw new ForbiddenError(MESSAGES.notAllowed);
       }
-      Movie.findByIdAndRemove(req.params.id)
+      Movie.findByIdAndRemove(req.params.movieId)
         .then(() => res.status(200).send({ message: MESSAGES.movieDeleted }))
         .catch(next);
     })
