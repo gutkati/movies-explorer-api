@@ -5,7 +5,7 @@ module.exports.allowedCors = {
     'http://api.cinema.service.nomoredomains.sbs',
     'https://api.cinema.service.nomoredomains.sbs',
     'https://github.com/gutkati',
-    'http://localhost:3000',
+    'http://localhost:3001',
   ],
   credentials: true, // устанавливает куки
 };
