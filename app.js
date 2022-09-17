@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser'); // мидлвэр
-const cookieParser = require('cookie-parser');
+//const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const cors = require('cors'); // библиотека CORS
 const helmet = require('helmet');
@@ -29,7 +29,7 @@ mongoose.connect(MONGO_URL, {
 // middleware
 app.use('*', cors(allowedCors));
 app.use(bodyParser.json()); // данные с фронтенда приходят JSON-формата
-app.use(cookieParser()); // подключаем парсер кук как мидлвэр
+//app.use(cookieParser()); // подключаем парсер кук как мидлвэр
 
 app.use(routes);
 
