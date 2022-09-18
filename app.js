@@ -15,7 +15,7 @@ const { limiter } = require('./middlewares/rateLimiter');
 const { MESSAGES } = require('./utils/constants');
 const { allowedCors } = require('./middlewares/cors');
 
-const { PORT = 3001 } = process.env;
+const { PORT = 3000 } = process.env;
 
 const app = express();
 app.use(helmet()); // защита приложение путем настройки приложения
@@ -29,6 +29,7 @@ mongoose.connect(MONGO_URL, {
 // middleware
 app.use('*', cors(allowedCors));
 app.use(bodyParser.json()); // данные с фронтенда приходят JSON-формата
+app.use(bodyParser.urlencoded({ extended: true }))
 //app.use(cookieParser()); // подключаем парсер кук как мидлвэр
 
 app.use(routes);
