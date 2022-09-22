@@ -66,18 +66,14 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.getInfoAboutMe = (req, res, next) => {
-  User.findById(req.user._id) // находит текущего пользователя по _id
+  User.findById(req.user._id)
     .then((user) => {
       if (!user) {
         throw new NotFoundError(MESSAGES.userNotFound);
-      } else {
-        res.status(200).send({
-          email: user.email,
-          name: user.name,
-        });
       }
+      res.send(user);
     })
-    .catch((err) => describeErrors(err, res, next));
+    .catch(next);
 };
 
 module.exports.updateProfile = (req, res, next) => {
@@ -85,12 +81,14 @@ module.exports.updateProfile = (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
     { name, email },
-    {
-      new: true,
-      runValidators: true,
-    },
+    { new: true, runValidators: true, upsert: false },
   )
-    .then((user) => res.status(200).send(user))
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError(MESSAGES.userNotFound);
+      }
+      res.send(user);
+    })
     .catch((err) => {
       if (err.code === 11000) { // если пользователь меняет почту по существующую в базе
         next(new ConflictError(MESSAGES.alreadyExist));
@@ -99,3 +97,38 @@ module.exports.updateProfile = (req, res, next) => {
       }
     });
 };
+
+// module.exports.getInfoAboutMe = (req, res, next) => {
+//   User.findById(req.user._id) // находит текущего пользователя по _id
+//     .then((user) => {
+//       if (!user) {
+//         throw new NotFoundError(MESSAGES.userNotFound);
+//       } else {
+//         res.status(200).send({
+//           name: user.name,
+//           email: user.email,
+//         });
+//       }
+//     })
+//     .catch((err) => describeErrors(err, res, next));
+// };
+//
+// module.exports.updateProfile = (req, res, next) => {
+//   const { name, email } = req.body;
+//   User.findByIdAndUpdate(
+//     req.user._id,
+//     { name, email },
+//     {
+//       new: true,
+//       runValidators: true,
+//     },
+//   )
+//     .then((user) => res.status(200).send(user))
+//     .catch((err) => {
+//       if (err.code === 11000) { // если пользователь меняет почту по существующую в базе
+//         next(new ConflictError(MESSAGES.alreadyExist));
+//       } else {
+//         describeErrors(err, res, next);
+//       }
+//     });
+// };

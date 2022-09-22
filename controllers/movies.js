@@ -60,11 +60,11 @@ module.exports.deleteMovie = (req, res, next) => {
         throw new NotFoundError(MESSAGES.moviesNotFound);
       }
 
-      if (req.user._id !== movie.owner.toString()) { // нет прав удалять видео другого пользователя
+      if (movie.owner.toString() !== req.user._id) { // нет прав удалять видео другого пользователя
         throw new ForbiddenError(MESSAGES.notAllowed);
       }
       Movie.findByIdAndRemove(req.params.movieId)
-        .then(() => res.status(200).send({ message: MESSAGES.movieDeleted }))
+        .then(() => res.send({ movie }))
         .catch(next);
     })
     .catch((err) => describeErrors(err, res, next));
